@@ -1,13 +1,33 @@
-import React from 'react'
-import Home from './pages/Home'
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import ProtectedRoute from "./context/ProtectedRoute";
 
-function App() {
+const App = () => {
   return (
-    <div>
-      <Home/>
-      
-    </div>
-  )
-}
+    <Router>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
-export default App
+        {/* Protected Route */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Default Route → Redirect to Login */}
+        <Route path="*" element={<Login />} />
+      </Routes>
+    </Router>
+  );
+};
+
+export default App;
