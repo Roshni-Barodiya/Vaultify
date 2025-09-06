@@ -1,8 +1,10 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import UploadBill from "./pages/UploadBill";
 import ProtectedRoute from "./context/ProtectedRoute";
 
 const App = () => {
@@ -10,10 +12,11 @@ const App = () => {
     <Router>
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Protected Route */}
+        {/* Protected Routes */}
         <Route
           path="/dashboard"
           element={
@@ -22,9 +25,17 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/upload-bill"
+          element={
+            <ProtectedRoute>
+              <UploadBill />
+            </ProtectedRoute>
+          }
+        />
 
-        {/* Default Route → Redirect to Login */}
-        <Route path="*" element={<Login />} />
+        {/* Fallback */}
+        <Route path="*" element={<Home />} />
       </Routes>
     </Router>
   );

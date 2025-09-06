@@ -1,103 +1,72 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { User, Mail, Lock } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Register = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { login } = useAuth();
   const navigate = useNavigate();
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
-  const [error, setError] = useState("");
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      await axios.post("http://localhost:5000/api/auth/register", form);
-      navigate("/login");
-    } catch (err) {
-      setError(err.response?.data?.message || "Registration failed. Try again.");
+    // Demo: auto-login after register
+    if (email && password) {
+      login(email, password);
+      navigate("/dashboard");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 p-6">
-      <div className="bg-white/20 backdrop-blur-xl rounded-2xl shadow-2xl p-8 w-full max-w-md">
-        <h2 className="text-3xl font-bold text-white text-center mb-6">Create Account ✨</h2>
-        {error && <p className="text-red-300 text-sm mb-4">{error}</p>}
-
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-white to-purple-100">
+      <div className="bg-white shadow-xl rounded-2xl p-10 w-full max-w-md">
+        <h1 className="text-3xl font-bold text-center text-purple-700 mb-6">
+          Create Account ✨
+        </h1>
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Name */}
           <div>
-            <label className="block text-sm text-white mb-1">Name</label>
-            <div className="flex items-center bg-white/30 rounded-lg px-3 py-2">
-              <User className="text-white mr-2" size={18} />
-              <input
-                type="text"
-                name="name"
-                value={form.name}
-                onChange={handleChange}
-                placeholder="Enter your name"
-                className="bg-transparent w-full focus:outline-none text-white placeholder-gray-200"
-                required
-              />
-            </div>
+            <label className="block text-gray-600 mb-2">Full Name</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter your name"
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-purple-500 outline-none"
+            />
           </div>
-
-          {/* Email */}
           <div>
-            <label className="block text-sm text-white mb-1">Email</label>
-            <div className="flex items-center bg-white/30 rounded-lg px-3 py-2">
-              <Mail className="text-white mr-2" size={18} />
-              <input
-                type="email"
-                name="email"
-                value={form.email}
-                onChange={handleChange}
-                placeholder="Enter your email"
-                className="bg-transparent w-full focus:outline-none text-white placeholder-gray-200"
-                required
-              />
-            </div>
+            <label className="block text-gray-600 mb-2">Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-purple-500 outline-none"
+            />
           </div>
-
-          {/* Password */}
           <div>
-            <label className="block text-sm text-white mb-1">Password</label>
-            <div className="flex items-center bg-white/30 rounded-lg px-3 py-2">
-              <Lock className="text-white mr-2" size={18} />
-              <input
-                type="password"
-                name="password"
-                value={form.password}
-                onChange={handleChange}
-                placeholder="Enter your password"
-                className="bg-transparent w-full focus:outline-none text-white placeholder-gray-200"
-                required
-              />
-            </div>
+            <label className="block text-gray-600 mb-2">Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Create a password"
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-purple-500 outline-none"
+            />
           </div>
-
-          {/* Button */}
           <button
             type="submit"
-            className="w-full py-2 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold rounded-lg shadow-lg hover:scale-[1.02] transition"
+            className="w-full py-3 bg-purple-600 text-white font-semibold rounded-xl shadow-md hover:bg-purple-700 transition duration-300"
           >
             Register
           </button>
         </form>
-
-        {/* Login Link */}
-        <p className="mt-6 text-sm text-center text-white">
+        <p className="text-gray-500 text-center mt-6">
           Already have an account?{" "}
-          <span
-            onClick={() => navigate("/login")}
-            className="cursor-pointer font-semibold hover:underline"
-          >
+          <Link to="/login" className="text-purple-600 font-semibold">
             Login
-          </span>
+          </Link>
         </p>
       </div>
     </div>
